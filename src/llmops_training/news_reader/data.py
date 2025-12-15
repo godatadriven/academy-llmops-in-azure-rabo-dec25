@@ -1,4 +1,3 @@
-import datasets
 import pandas as pd
 import datetime
 from typing import Optional
@@ -10,13 +9,12 @@ def get_bbc_news_sample(year_month: Optional[str] = None) -> pd.DataFrame:
     Some columns are dropped or altered and a new column `is_business` is added,
     which indicates whether the article is about business.
     """
-    if year_month == None:
-        year_month = (datetime.date.today() - datetime.timedelta(days=30*12)).strftime("%Y-%m")
-    
-    dataset = datasets.load_dataset("RealTimeData/bbc_news_alltime", year_month)
+    # load local parquet file using pandas
 
     df = (
-        pd.DataFrame(dataset["train"])  # There is only train
+        pd.read_parquet(
+            "/Users/dw/code/academy-llmops-in-azure-rabo-dec25/bbc_news_alltime_2017-03_train.parquet"
+        )
         .drop_duplicates(subset=["title"])
         .assign(
             is_business=lambda d: d["section"] == "Business",
@@ -43,7 +41,7 @@ def get_evaluation_data() -> pd.DataFrame:
     would take quite long, or we quickly hit our LLM API rate limits.
     """
 
-    year_month = (datetime.date.today() - datetime.timedelta(days=30*12)).strftime("%Y-%m")
+    year_month = (datetime.date.today() - datetime.timedelta(days=30 * 12)).strftime("%Y-%m")
 
     data = get_bbc_news_sample(year_month=year_month)
     sample = (
