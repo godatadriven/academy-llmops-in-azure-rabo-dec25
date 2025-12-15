@@ -26,5 +26,4 @@ COPY /src /app/src
 RUN pip install .
 
 # Run app with streamlit
-# TODO: Fill me in! Add the path to our app for streamlit to run
-CMD ["streamlit", "run", "<path_to_our_app", "--server.port", "8081"]
+CMD ["streamlit", "run", "src/llmops_training/news_reader/app/app.py", "--server.port", "8081"]
