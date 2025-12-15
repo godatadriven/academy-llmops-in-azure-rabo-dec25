@@ -48,7 +48,7 @@ nice capabilities for running apps with automatic port forwarding.
 (Optional) To access the codespace in your locally installed VS Code Desktop:
 
 1. Open the command palette in your browser version of VS Code (on Mac the shortcut is ⌘+SHIFT+P, on Windows and Linux it is Ctrl+Shift+P).
-2. From the command palette, select "Codespaces: Open in VS Code Desktop", and follow the steps to open VS Code locally.
+2. From the command palette, select "Codespaces: az in VS Code Desktop", and follow the steps to open VS Code locally.
 
 ### Configure Azure CLI
 
