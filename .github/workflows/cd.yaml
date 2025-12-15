@@ -1,0 +1,69 @@
+name: CD
+
+on:
+  # TODO: Fill me in! When should this pipeline run?
+
+  workflow_dispatch:
+  # Nothing needs to be added here. Do you know what workflow_dispatch does?
+
+env:
+  USER_NAME: "<your-name>" # TODO: Fill me in! Same as in .env
+  CONTAINER_REGISTRY: "<your-container-registry>" # TODO: Fill me in! Name of your Azure Container Registry
+  RESOURCE_GROUP: "<your-resource-group>" # TODO: Fill me in! Same as in .env
+  LOCATION: "westeurope"
+
+jobs:
+  build-push-docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Login to Azure Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.CONTAINER_REGISTRY }}.azurecr.io
+          username: ${{ secrets.REGISTRY_USERNAME }}
+          password: ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.CONTAINER_REGISTRY }}.azurecr.io/llmops-app-${{ env.USER_NAME }}:latest .
+
+      # TODO: Fill me in! Push the Docker image that we've just built
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.CONTAINER_REGISTRY }}.azurecr.io/llmops-app-${{ env.USER_NAME }}:latest
+
+  deploy-container-app:
+    runs-on: ubuntu-latest
+    needs: build-push-docker
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # TODO: Fill me in! What port does the app run on?
+      - name: Deploy to Azure Container Apps
+        run: |
+          az containerapp up \
+            --name llmops-app-${{ env.USER_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --location ${{ env.LOCATION }} \
+            --image ${{ env.CONTAINER_REGISTRY }}.azurecr.io/llmops-app-${{ env.USER_NAME }}:latest \
+            --target-port 8081 \
+            --ingress external \
+            --registry-server ${{ env.CONTAINER_REGISTRY }}.azurecr.io \
+            --min-replicas 0 \
+            --max-replicas 1

@@ -1,0 +1,68 @@
+# For more info about the pyproject.toml file, see:
+# https://xebia.com/blog/an-updated-guide-to-setuptools-and-pyproject-toml/
+
+# Run `uv sync --extra dev` to install with dev dependencies.
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "academy-llmops-in-azure"
+dependencies = [
+    "azure-ai-ml>=1.15.0",
+    "azure-monitor-opentelemetry>=1.2.0",
+    "opentelemetry-api==1.25.0",
+    "opentelemetry-sdk==1.25.0",
+    "azure-monitor-opentelemetry-exporter>=1.0.0b27",
+    "opentelemetry-instrumentation-logging==0.46b0",
+    "datasets>=2.20.0",
+    "pandas>=2.2.2",
+    "python-dotenv>=1.0.1",
+    "instructor>=1.3.3",
+    "openai>=1.0.0",
+    "pydantic==2.7.4",
+    "rich==13.7.1",
+    "rouge==1.0.1",
+    "nltk==3.8.1",
+    "structlog==24.4.0",
+    "streamlit>=1.50.0",
+    "streamlit-extras>=0.6.0",
+    "jupyter>=1.1.1",
+    "azureml-core>=1.60.0.post1",
+    "azure-identity>=1.25.1",
+    "azure-monitor-query>=2.0.0",
+]
+dynamic = ["version"]
+requires-python = ">=3.12,<3.13"
+authors = [
+    {name = "Yke Rusticus", email = "yke.rusticus@xebia.com"},
+    {name = "Rens Dimmendaal", email = "rens.dimmendaal@xebia.com"},
+    {name = "Caio Benatti", email = "caio.benatti@xebia.com"},
+    {name = "Jeroen Overschie", email = "jeroen.overschie@xebia.com"},
+    {name = "Bing Tan", email = "bing.tan@xebia.com"},
+    {name = "Sinan Calisir", email = "sinan.calisir@xebia.com"},
+]
+description = "An Example Project"
+readme = "README.md"
+
+[project.optional-dependencies]
+dev = [
+    "ipykernel>=6.29.4",
+    "ipywidgets>=8.1.3",
+    "ipython>=6.2,<9",
+    "pytest==8.2.2",
+    "pre-commit==3.7.1",
+    "ruff==0.4.9",
+]
+
+[tool.ruff]
+line-length = 100
+lint.select = ["I"]
+src = ["src"]
+
+[tool.black]
+line-length = 100
+
+[tool.uv]
+package = true

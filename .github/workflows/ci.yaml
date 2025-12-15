@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  # TODO: Fill me in! When should this pipeline run?
+
+  workflow_dispatch:
+  # Nothing needs to be added here. Do you know what workflow_dispatch does?
+
+env:
+  USER_NAME: "<your-name>" # TODO: Fill me in! Use the same user name as in .env
+
+jobs:
+  run-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Install package
+        run: |
+          uv sync --extra dev
+
+      # TODO: Implement me! Run pre-commit on all files
+      - name: Run pre-commit
+        continue-on-error: true  # For training purposes, skip this step if fail
+        run: |
+          echo "Not implemented yet!"
+
+      # TODO: Implement me! Run pytest on tests folder
+      - name: Run pytest
+        continue-on-error: true  # For training purposes, skip this step if fail
+        run: |
+          echo "Not implemented yet!"
+        env:
+          USER_NAME: ${{ env.USER_NAME }}

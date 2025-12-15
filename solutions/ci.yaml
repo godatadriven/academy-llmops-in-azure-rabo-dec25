@@ -1,0 +1,42 @@
+name: CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main # Use your personal branch name here
+
+env:
+  USER_NAME: "<your-name>" # TODO: Fill me in!
+
+jobs:
+  run-checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Install package
+        run: |
+          pip install ".[dev]"
+
+      - name: Run pre-commit
+        run: |
+          uv run pre-commit run --all-files
+
+      - name: Run pytest
+        run: |
+          pytest tests
+        env:
+          USER_NAME: ${{ env.USER_NAME }}
