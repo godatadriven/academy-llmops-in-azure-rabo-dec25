@@ -27,7 +27,9 @@ def generate_text(prompt: str, model_name: str = "o3-mini", **kwargs) -> str:
     }
     generation_config.update(kwargs)
     response = azure_client.chat.completions.create(
-        ... # TODO: Fill me in!
+        model=model_name,
+        messages=[{"role": "user", "content": prompt}],
+        #... # TODO: Fill me in!
     )
     return response.choices[0].message.content
 
