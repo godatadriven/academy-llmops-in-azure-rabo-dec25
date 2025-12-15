@@ -10,7 +10,7 @@ import structlog
 from streamlit.delta_generator import DeltaGenerator
 
 from llmops_training.news_reader.app import utils
-from llmops_training.news_reader.extraction import mock_extract_info_from_articles
+from llmops_training.news_reader.extraction import extract_info_from_articles
 from llmops_training.news_reader.logs import configure_tracer
 
 dotenv.load_dotenv()
@@ -46,8 +46,8 @@ def article_upload_form(position: DeltaGenerator) -> None:
             # Create a structured log entry for the number of articles added
             # ... # TODO(11-monitor-functional-metrics): Fill me in! Add log statement
 
-            # Exract structured information using the `mock_extract_info_from_articles` function
-            results, _ = mock_extract_info_from_articles(articles)
+            # Exract structured information
+            results, _ = extract_info_from_articles(articles)
 
             # TODO(13-feedback-with-trace): Make sure trace IDs from `extract_info_from_articles`
             # are returned and stored in the session state `st.session_state["trace_ids"]`
