@@ -7,7 +7,7 @@ on:
   # Nothing needs to be added here. Do you know what workflow_dispatch does?
 
 env:
-  USER_NAME: "<your-name>" # TODO: Fill me in! Use the same user name as in .env
+  USER_NAME: "bobb" # TODO: Fill me in! Use the same user name as in .env
 
 jobs:
   run-checks:
