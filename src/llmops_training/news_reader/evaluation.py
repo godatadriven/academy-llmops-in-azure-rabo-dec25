@@ -100,6 +100,32 @@ def evaluate_summarization(general_info_list, data) -> Dict[str, float]:
 
     return avg_scores
 
+def evaluate_business_classification(
+    business_category_list: List[Optional[GeneralInfo]], data: pd.DataFrame
+) -> float:
+    """Return accuracy of classification of whether an article is about business.
+
+    Data should contain:
+    - a column "is_business" with a boolean indicating whether the article is about business.
+
+    The provided list of business categories should be in the same order as the data.
+    """
+
+    correct = 0
+    incorrect = 0
+    for i, row in data.iterrows():
+        if business_category_list[i] is None:
+            continue
+
+        is_about_business_prediction = business_category_list[i].is_about_business
+        is_about_business_labeled = row["is_business"]
+        if is_about_business_prediction == is_about_business_labeled:
+            correct += 1
+        else:
+            incorrect += 1  # TODO: Extend me! Write if-else statement to increment correct or incorrect
+
+    accuracy = correct / (correct + incorrect)
+    return accuracy
 
 def run_evaluation(data: pd.DataFrame) -> Dict[str, float]:
     """Run evaluation functions on given data set and log and return metrics"""
