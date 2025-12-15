@@ -6,10 +6,11 @@ from opentelemetry import trace
 from pydantic import BaseModel, Field
 
 from llmops_training.news_reader.generation import generate_object
-#from llmops_training.news_reader.logs import log_extraction_step, log_with_trace
+
+# from llmops_training.news_reader.logs import log_extraction_step, log_with_trace
 
 tracer = trace.get_tracer(__name__)
-#logger = structlog.get_logger()
+# logger = structlog.get_logger()
 
 dotenv.load_dotenv()
 
@@ -282,5 +283,3 @@ def mock_extract_info_from_articles(articles: List[str]) -> Tuple[List[ArticleIn
         trace_ids.append(trace_id)
 
     return article_infos, trace_ids
-
-
