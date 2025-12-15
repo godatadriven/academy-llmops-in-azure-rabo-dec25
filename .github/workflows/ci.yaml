@@ -1,13 +1,13 @@
 name: CI
 
 on:
-  # TODO: Fill me in! When should this pipeline run?
+  branch: feature/diederik
 
   workflow_dispatch:
   # Nothing needs to be added here. Do you know what workflow_dispatch does?
 
 env:
-  USER_NAME: "<your-name>" # TODO: Fill me in! Use the same user name as in .env
+  USER_NAME: "diederik" # TODO: Fill me in! Use the same user name as in .env
 
 jobs:
   run-checks:
