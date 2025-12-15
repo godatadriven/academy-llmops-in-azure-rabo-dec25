@@ -13,10 +13,10 @@ def get_bbc_news_sample(year_month: Optional[str] = None) -> pd.DataFrame:
     if year_month == None:
         year_month = (datetime.date.today() - datetime.timedelta(days=30*12)).strftime("%Y-%m")
     
-    dataset = datasets.load_dataset("RealTimeData/bbc_news_alltime", year_month)
-
+    # dataset = datasets.load_dataset("RealTimeData/bbc_news_alltime", year_month)
+    dataset = pd.read_parquet("/Users/jasperkrebbers/trainings/academy-llmops-in-azure-rabo-dec25/tests/parquet_articles/bbc_news_alltime_train.parquet")
     df = (
-        pd.DataFrame(dataset["train"])  # There is only train
+        pd.DataFrame(dataset) # ["train"])  # There is only train
         .drop_duplicates(subset=["title"])
         .assign(
             is_business=lambda d: d["section"] == "Business",
