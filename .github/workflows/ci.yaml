@@ -1,7 +1,9 @@
 name: CI
 
 on:
-  # TODO: Fill me in! When should this pipeline run?
+  push:
+    branches:
+      - feature/jasper
 
   workflow_dispatch:
   # Nothing needs to be added here. Do you know what workflow_dispatch does?
