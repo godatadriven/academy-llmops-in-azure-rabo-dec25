@@ -7,7 +7,7 @@ on:
   # Nothing needs to be added here. Do you know what workflow_dispatch does?
 
 env:
-  USER_NAME: "<your-name>" # TODO: Fill me in! Use the same user name as in .env
+  USER_NAME: "jasper" # TODO: Fill me in! Use the same user name as in .env
 
 jobs:
   run-checks:
@@ -33,12 +33,12 @@ jobs:
       - name: Run pre-commit
         continue-on-error: true  # For training purposes, skip this step if fail
         run: |
-          echo "Not implemented yet!"
+          pre-commit run --all-files
 
       # TODO: Implement me! Run pytest on tests folder
       - name: Run pytest
         continue-on-error: true  # For training purposes, skip this step if fail
         run: |
-          echo "Not implemented yet!"
+          pytest tests
         env:
           USER_NAME: ${{ env.USER_NAME }}
