@@ -6,7 +6,7 @@ from opentelemetry import trace
 from pydantic import BaseModel, Field
 
 from llmops_training.news_reader.generation import generate_object
-#from llmops_training.news_reader.logs import log_extraction_step, log_with_trace
+# from llmops_training.news_reader.logs import log_extraction_step, log_with_trace
 
 tracer = trace.get_tracer(__name__)
 #logger = structlog.get_logger()
@@ -83,7 +83,7 @@ def format_prompt(prompt_template: str, article: str, business: Optional[str] = 
     return prompt_template.format(article=article)
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_general_info", attributes={"username": "arnodewolf"})
 def extract_general_info(prompt_template: str, article: str, **kwargs) -> GeneralInfo:
     """Extract general information from an article, such as title and summary"""
     prompt = format_prompt(prompt_template, article)
@@ -94,7 +94,7 @@ def extract_general_info(prompt_template: str, article: str, **kwargs) -> Genera
     return output
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_business_category", attributes={"username": "arnodewolf"})
 def extract_business_category(prompt_template: str, article: str, **kwargs) -> BusinessCategory:
     """Extract whether an article is about business"""
     prompt = format_prompt(prompt_template, article)
@@ -105,7 +105,7 @@ def extract_business_category(prompt_template: str, article: str, **kwargs) -> B
     return output
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_businesses_involved", attributes={"username": "arnodewolf"})
 def extract_businesses_involved(prompt_template: str, article: str, **kwargs) -> BusinessesInvolved:
     """Extract which businesses are involved in an article"""
     prompt = format_prompt(prompt_template, article)
@@ -116,7 +116,7 @@ def extract_businesses_involved(prompt_template: str, article: str, **kwargs) ->
     return output
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_business_specific_info", attributes={"username": "arnodewolf"})
 def extract_business_specific_info(
     prompt_template: str, article: str, business: str, **kwargs
 ) -> BusinessSpecificInfo:
@@ -133,7 +133,7 @@ def is_business_we_care_about(business: str) -> bool:
     return True  # Some logic here
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_business_info", attributes={"username": "arnodewolf"})
 def extract_business_info(
     businesses_involved_prompt_template: str,
     business_specific_prompt_template: str,
@@ -155,7 +155,7 @@ def extract_business_info(
     return business_info
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_article_info", attributes={"username": "arnodewolf"})
 def extract_article_info(article: str, **kwargs) -> Tuple[ArticleInfo, int]:
     """Return structured information from an article, and trace ID.
 
