@@ -48,7 +48,7 @@ container-app-deploy:
 		--name llmops-app-${USER_NAME} \
 		--resource-group ${RESOURCE_GROUP} \
 		--location westeurope \
-		--image ${IMAGE_NAME} \
+		--image ${IMAGE_NAME}:latest \
 		--target-port 8081 \
 		--ingress external \
 		--registry-username ${CONTAINER_REGISTRY_USERNAME} \
