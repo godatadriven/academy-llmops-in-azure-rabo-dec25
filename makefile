@@ -4,7 +4,8 @@
 
 include .env
 
-IMAGE_NAME := ${CONTAINER_REGISTRY}.azurecr.io/llmops-app-${USER_NAME}
+IMAGE_TAG := $(shell date +%Y%m%d%H%M%S)
+IMAGE_NAME := ${CONTAINER_REGISTRY}.azurecr.io/llmops-app-${USER_NAME}:$(IMAGE_TAG)
 
 .PHONY: help
 help:
@@ -48,7 +49,7 @@ container-app-deploy:
 		--name llmops-app-${USER_NAME} \
 		--resource-group ${RESOURCE_GROUP} \
 		--location westeurope \
-		--image ${IMAGE_NAME}:latest \
+		--image $(IMAGE_NAME) \
 		--target-port 8081 \
 		--ingress external \
 		--registry-username ${CONTAINER_REGISTRY_USERNAME} \
@@ -59,6 +60,8 @@ container-app-deploy:
 		"AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}" \
 		"AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION}" \
 		"AZURE_OPENAPI_DEPLOYMENT_NAME=o3-mini"
+
+
 
 .PHONY: build-push-deploy
 build-push-deploy: docker-build docker-push container-app-deploy
