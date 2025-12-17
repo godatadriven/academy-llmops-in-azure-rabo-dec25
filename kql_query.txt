@@ -1,0 +1,5 @@
+traces
+    | where cloud_RoleInstance contains "llmops-app-arnodewolf"
+    | where message contains "articles_uploaded"
+    | extend parsed = parse_json(message)
+    | extend num_articles = parsed.num_articles

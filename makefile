@@ -44,8 +44,21 @@ deploy-app-environment:
 
 .PHONY: container-app-deploy
 container-app-deploy:
-# Not Implemented yet
-	az containerapp create --name llmops-app-${USER_NAME} --resource-group ${RESOURCE_GROUP} --image ${IMAGE_NAME}:latest --environment ${APP_ENVIRONMENT} --system-assigned
-	
+	az containerapp up \
+		--name llmops-app-${USER_NAME} \
+		--resource-group ${RESOURCE_GROUP} \
+		--location westeurope \
+		--image ${IMAGE_NAME} \
+		--target-port 8081 \
+		--ingress external \
+		--registry-username ${CONTAINER_REGISTRY_USERNAME} \
+		--registry-password ${CONTAINER_REGISTRY_PASSWORD} \
+		--env-vars \
+		"APPLICATIONINSIGHTS_CONNECTION_STRING=${APPLICATIONINSIGHTS_CONNECTION_STRING}" \
+		"AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}" \
+		"AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}" \
+		"AZURE_OPENAI_API_VERSION=${AZURE_OPENAI_API_VERSION}" \
+		"AZURE_OPENAPI_DEPLOYMENT_NAME=o3-mini"
+
 .PHONY: build-push-deploy
 build-push-deploy: docker-build docker-push container-app-deploy

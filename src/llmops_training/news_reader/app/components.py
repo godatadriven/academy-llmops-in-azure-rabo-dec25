@@ -11,13 +11,12 @@ from streamlit.delta_generator import DeltaGenerator
 
 from llmops_training.news_reader.app import utils
 from llmops_training.news_reader.extraction import extract_info_from_articles
-from llmops_training.news_reader.logs import configure_tracer
+from llmops_training.news_reader.logs import configure_tracer, configure_structlog
 
 dotenv.load_dotenv()
 
 configure_tracer()
-logging.basicConfig(level=logging.INFO)
-structlog.configure(logger_factory=structlog.stdlib.LoggerFactory())
+configure_structlog()
 
 logger = structlog.get_logger()
 
@@ -44,7 +43,7 @@ def article_upload_form(position: DeltaGenerator) -> None:
             articles = st.session_state["articles"]
 
             # Create a structured log entry for the number of articles added
-            # ... # TODO(11-monitor-functional-metrics): Fill me in! Add log statement
+            logger.info("articles_uploaded", num_articles=len(articles), user_name="arnodewolf")
 
             # Exract structured information
             results, _ = extract_info_from_articles(articles)
