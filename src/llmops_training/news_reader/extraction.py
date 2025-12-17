@@ -6,7 +6,7 @@ from opentelemetry import trace
 from pydantic import BaseModel, Field
 
 from llmops_training.news_reader.generation import generate_object
-#from llmops_training.news_reader.logs import log_extraction_step, log_with_trace
+from llmops_training.news_reader.logs import log_extraction_step, log_with_trace
 
 tracer = trace.get_tracer(__name__)
 #logger = structlog.get_logger()
@@ -88,7 +88,9 @@ def extract_general_info(prompt_template: str, article: str, **kwargs) -> Genera
     prompt = format_prompt(prompt_template, article)
     output = generate_object(prompt, GeneralInfo, **kwargs)
 
-    tracer.get_current_span().set_attribute("article_title", output.title)
+    log_extraction_step(
+        trace.get_current_span().name, article, prompt_template, output.model_dump()
+    )
     return output
 
 
@@ -97,9 +99,9 @@ def extract_business_category(prompt_template: str, article: str, **kwargs) -> B
     """Extract whether an article is about business"""
     prompt = format_prompt(prompt_template, article)
     output = generate_object(prompt, BusinessCategory, **kwargs)
-
-    tracer.get_current_span().set_attribute("is_business_article", output.is_business_article)
-
+    log_extraction_step(
+        trace.get_current_span().name, article, prompt_template, output.model_dump()
+    )
     return output
 
 
@@ -108,9 +110,9 @@ def extract_businesses_involved(prompt_template: str, article: str, **kwargs) ->
     """Extract which businesses are involved in an article"""
     prompt = format_prompt(prompt_template, article)
     output = generate_object(prompt, BusinessesInvolved, **kwargs)
-
-    # ...  # TODO(12-log-with-trace): Fill me in! Log the extraction step
-
+    log_extraction_step(
+        trace.get_current_span().name, article, prompt_template, output.model_dump()
+    )
     return output
 
 
@@ -121,8 +123,9 @@ def extract_business_specific_info(
     """Extract specific information about a business from an article, such as stock price change"""
     prompt = format_prompt(prompt_template, article, business=business)
     output = generate_object(prompt, BusinessSpecificInfo, **kwargs)
-
-    tracer.get_current_span().set_attribute("business_name", business)
+    log_extraction_step(
+        trace.get_current_span().name, article, prompt_template, output.model_dump(), business
+    )
     return output
 
 
@@ -160,7 +163,7 @@ def extract_article_info(article: str, **kwargs) -> Tuple[ArticleInfo, int]:
     may become over-modularized, but it can be useful for more complex applications.
     """
 
-    tracer.get_current_span().set_attribute("article_length", len(article))
+    log_with_trace(trace.get_current_span().name, json_payload={"article": article})
 
     general_info = extract_general_info(
         get_general_info_prompt_template(),
@@ -191,7 +194,7 @@ def extract_article_info(article: str, **kwargs) -> Tuple[ArticleInfo, int]:
 
     # TODO(13-feedback-with-trace): replace mock trace_id with
     
-    trace_id = 123456789 #trace.get_current_span().get_span_context().trace_id
+    trace_id = trace.get_current_span().get_span_context().trace_id
     return article_info, trace_id
 
 
