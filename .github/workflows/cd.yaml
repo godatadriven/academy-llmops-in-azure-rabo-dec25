@@ -70,6 +70,5 @@ jobs:
             --image ${{ env.CONTAINER_REGISTRY }}.azurecr.io/llmops-app-${{ env.USER_NAME }}:latest \
             --target-port 8081 \
             --ingress external \
-            --registry-server ${{ env.CONTAINER_REGISTRY }}.azurecr.io \
-            --min-replicas 0 \
-            --max-replicas 1
+            --registry-server ${{ env.CONTAINER_REGISTRY }}.azurecr.io 
+
