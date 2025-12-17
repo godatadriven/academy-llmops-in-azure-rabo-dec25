@@ -82,30 +82,28 @@ def format_prompt(prompt_template: str, article: str, business: Optional[str] = 
         return prompt_template.format(article=article, business=business)
     return prompt_template.format(article=article)
 
-
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_general_info", attributes={"service.name": "jasper"})
 def extract_general_info(prompt_template: str, article: str, **kwargs) -> GeneralInfo:
     """Extract general information from an article, such as title and summary"""
     prompt = format_prompt(prompt_template, article)
     output = generate_object(prompt, GeneralInfo, **kwargs)
 
-    # ...  # TODO(12-log-with-trace): Fill me in! Log the extraction step
-
+    tracer.get_current_span().set_attribute("article_title", output.title)
     return output
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_business_category", attributes={"service.name": "jasper"})
 def extract_business_category(prompt_template: str, article: str, **kwargs) -> BusinessCategory:
     """Extract whether an article is about business"""
     prompt = format_prompt(prompt_template, article)
     output = generate_object(prompt, BusinessCategory, **kwargs)
 
-    # ...  # TODO(12-log-with-trace): Fill me in! Log the extraction step
+    tracer.get_current_span().set_attribute("is_business_article", output.is_business_article)
 
     return output
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_businesses_involved", attributes={"service.name": "jasper"})
 def extract_businesses_involved(prompt_template: str, article: str, **kwargs) -> BusinessesInvolved:
     """Extract which businesses are involved in an article"""
     prompt = format_prompt(prompt_template, article)
@@ -116,7 +114,7 @@ def extract_businesses_involved(prompt_template: str, article: str, **kwargs) ->
     return output
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_business_specific_info", attributes={"service.name": "jasper"})
 def extract_business_specific_info(
     prompt_template: str, article: str, business: str, **kwargs
 ) -> BusinessSpecificInfo:
@@ -124,8 +122,7 @@ def extract_business_specific_info(
     prompt = format_prompt(prompt_template, article, business=business)
     output = generate_object(prompt, BusinessSpecificInfo, **kwargs)
 
-    # ...  # TODO(12-log-with-trace): Fill me in! Log the extraction step
-
+    tracer.get_current_span().set_attribute("business_name", business)
     return output
 
 
@@ -133,7 +130,7 @@ def is_business_we_care_about(business: str) -> bool:
     return True  # Some logic here
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_business_info", attributes={"service.name": "jasper"})
 def extract_business_info(
     businesses_involved_prompt_template: str,
     business_specific_prompt_template: str,
@@ -155,7 +152,7 @@ def extract_business_info(
     return business_info
 
 
-# ... # TODO(12-logging-traces): Fill me in! Wrap the function with a trace span
+@tracer.start_as_current_span("extract_article_info", attributes={"service.name": "jasper"})
 def extract_article_info(article: str, **kwargs) -> Tuple[ArticleInfo, int]:
     """Return structured information from an article, and trace ID.
 
@@ -163,7 +160,7 @@ def extract_article_info(article: str, **kwargs) -> Tuple[ArticleInfo, int]:
     may become over-modularized, but it can be useful for more complex applications.
     """
 
-    # ...  # TODO(12-log-with-trace): Fill me in! Add informative logs with trace
+    tracer.get_current_span().set_attribute("article_length", len(article))
 
     general_info = extract_general_info(
         get_general_info_prompt_template(),
@@ -193,8 +190,8 @@ def extract_article_info(article: str, **kwargs) -> Tuple[ArticleInfo, int]:
     )
 
     # TODO(13-feedback-with-trace): replace mock trace_id with
-    # trace.get_current_span().get_span_context().trace_id
-    trace_id = 1234567890  # Mock trace ID
+    
+    trace_id = 123456789 #trace.get_current_span().get_span_context().trace_id
     return article_info, trace_id
 
 
