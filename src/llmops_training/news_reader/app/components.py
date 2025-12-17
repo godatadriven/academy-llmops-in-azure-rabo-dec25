@@ -48,6 +48,7 @@ def article_upload_form(position: DeltaGenerator) -> None:
 
             # Create a structured log entry for the number of articles added
             # ... # TODO(11-monitor-functional-metrics): Fill me in! Add log statement
+            logger.info("articles_added", number_articles_added=len(articles), user_name=os.getenv("USER_NAME", "jasper"))
 
             # Extract structured information using the `mock_extract_info_from_articles` function
             results, _ = (extract_article_info(articles), ...)  

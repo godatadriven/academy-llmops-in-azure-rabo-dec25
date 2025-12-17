@@ -6,10 +6,7 @@ on:
     workflows: ["CI"]
     types: [completed]
     branches:
-      - 'feature/jasper'
-    
-
-  
+      - feature/jasper
 
 
   workflow_dispatch:
