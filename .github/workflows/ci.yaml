@@ -41,6 +41,6 @@ jobs:
       - name: Run pytest
         continue-on-error: true  # For training purposes, skip this step if fail
         run: |
-          pytest tests
+          pytest tests/
         env:
           USER_NAME: ${{ env.USER_NAME }}
