@@ -9,7 +9,7 @@ import logging
 import structlog
 from streamlit.delta_generator import DeltaGenerator
 
-from llmops_training.news_reader.logs import configure_tracer
+from llmops_training.news_reader.logs import configure_tracer, configure_structlog
 from llmops_training.news_reader.app import utils
 from llmops_training.news_reader.extraction import (
     mock_extract_info_from_articles,
@@ -19,9 +19,7 @@ from llmops_training.news_reader.extraction import (
 dotenv.load_dotenv()
 
 configure_tracer()
-logging.basicConfig(level=logging.INFO)
-structlog.configure(logger_factory=structlog.stdlib.LoggerFactory())
-
+configure_structlog()
 logger = structlog.get_logger()
 
 
